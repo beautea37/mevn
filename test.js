@@ -186,6 +186,60 @@ Math.max(...as);
 const asdf = [1, 2, 3, 4];
 console.log("MAX : " + Math.max(...asdf));
 
+//Promise 감싸기 async & await
+const promiseA = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(1);
+            resolve(1);
+        }, Math.random() * 100);
+    })
+}
+const promiseB = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(2);
+            resolve(2);
+        }, Math.random() * 100);
+    })
+}
+const promiseC = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(3);
+            resolve(3);
+        }, Math.random() * 100);
+    })
+}
+const main = async () => {
+    await promiseA()
+    await promiseB()
+    await promiseC()
+}
+console.log("main async")
+main()
+
+//Promise를 통한 에러 핸들링
+const errorHandeling = (c = "asdf") =>{
+    return new Promise((resolve, reject)=>{
+        //비동기 로직
+        throw new Error("에러 msg")
+        reject(new Error("reject error"))
+        reject("에러 3");
+        setTimeout(() => {
+        resolve(`${c} resolve msg`)
+        }, 1 * 1000)
+    })
+}
+errorHandeling().then(ret=> {
+    return a(`asdf`);
+    }).then(ret =>{
+    console.log(ret);
+}).catch(e => {
+    console.log(`${e} Error3`)
+})
+
+
 
 //rest 매개변수 Case 세가지
 const rest1 = (b, ...rest) => {
