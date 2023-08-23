@@ -220,25 +220,102 @@ console.log("main async")
 main()
 
 //Promise를 통한 에러 핸들링
-const errorHandeling = (c = "asdf") =>{
-    return new Promise((resolve, reject)=>{
+const errorHandeling = (c = "asdf") => {
+    return new Promise((resolve, reject) => {
         //비동기 로직
         throw new Error("에러 msg")
         reject(new Error("reject error"))
         reject("에러 3");
         setTimeout(() => {
-        resolve(`${c} resolve msg`)
+            resolve(`${c} resolve msg`)
         }, 1 * 1000)
     })
 }
-errorHandeling().then(ret=> {
+errorHandeling().then(ret => {
     return a(`asdf`);
-    }).then(ret =>{
+}).then(ret => {
     console.log(ret);
 }).catch(e => {
     console.log(`${e} Error3`)
 })
+//then을 통한 에러처리 - 1
+const async1 = param => {
+    return new Promise((resolve, reject) => {
+        resolve(param * 2);
+    })
+}
+const async2 = param => {
+    return new Promise((resolve, reject) => {
+        throw "에러"
+        resolve(param * 2);
+    })
+}
+async1(1)
+    .then(async2)
+    .then(result => {
+        console.log(result)     // 4
+    }, reason => {
+        console.log(`이 Promise 부분은 ${reason}으로 종료시킴`)
+    })
 
+//then을 통한 에러처리 - 2
+const async3 = param => {
+    return new Promise((resolve, reject)=> {
+        resolve(param * 2);
+    })
+}
+const async4 = param => {
+    return new Promise((resolve, reject) => {
+        resolve(param * 2);
+    })
+}
+async3(1).then(async4)
+    .then(result => {
+        throw "에러";
+        console.log(result);        //4
+    }, reason => {
+        console.log((`이 promise는 ${reason}`));
+    })
+
+//catch로 에러처리
+const async5 = param => {
+    return new Promise((resolve, reject) => {
+        resolve(param * 2);
+    })
+}
+const async6 = param => {
+    return new Promise((resolve, reject) => {
+        throw "에러";
+        resolve(param * 2);
+    })
+}
+async5(1).then(async6)
+    .then(result => {
+        console.log(result);        //4
+        throw "에러";
+    })
+    .catch(reason => {
+        console.log(`이 Promise로 ${reason}으로 종료`);
+    })
+    .finally(() => {
+        console.log(`이 부분은 무조건 실행되는 로직임`);
+    })
+
+const async7 = (message, ret) => {
+    return new Promise((resolve, reject)=>{
+        setTimeout(() => {
+            console.log(message);
+            console.log(new Date());
+            resolve(ret)
+        }, 2000);
+    })
+}
+
+const promises = [async7("비동기 함수 1", 1), async7("비동기 함수 2", 2)]
+Promise.all(promises)
+    .then(data => {
+        console.log(data);
+    })
 
 
 //rest 매개변수 Case 세가지
@@ -294,3 +371,4 @@ const [easyPutValueVB, easyPutValueVC] = easyPutValueVa2;
 console.log(easyPutValueVB + " and " + easyPutValueVC);
 //{}를 통한 객체 역시 마찬가지로 변수 값 변경 및 입력 가능함.
 
+//274 Promise
