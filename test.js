@@ -372,3 +372,121 @@ console.log(easyPutValueVB + " and " + easyPutValueVC);
 //{}를 통한 객체 역시 마찬가지로 변수 값 변경 및 입력 가능함.
 
 //274 Promise
+
+
+
+//심심풀이용 자바스크립트 문풀
+const filePath = process.platform === 'linux' ? '/dev/stdin' : 'ans.txt';
+const input = require('fs').readFileSync(filePath).toString().trim().split("\n");
+const ans = [];
+for(let text of input){
+    const stack = [];
+    let isCompare = true;
+    if(text == ".") break;
+    for(let i = 0; i < text.length; i++){
+        if(text[i] == "[" || text[i] == "("){
+            stack.push(text[i]);
+        }
+        else if(text[i] == "]"){
+            if(stack[stack.length - 1] == "["){
+                stack.pop();
+            }
+            else{
+                isCompare = false;
+                break;
+            }
+        }
+        else if(text[i] == ")"){
+            if(stack[stack.length - 1] == "("){
+                stack.pop();
+            }
+            else{
+                isCompare = false;
+                break;
+            }
+        }
+        else if(text[i] == ".") break;
+    }
+    if(stack.length > 0 || !isCompare) ans.push("no");
+    else ans.push("yes");
+}
+
+console.log(ans.join("\n"));
+////////////////////
+
+const fs = require('fs');
+const [n, ...arr] = fs.readFileSync("./dev/stdin").toString().trim().split("\n");
+
+
+class Node{
+    constructor(item){
+        this.item = item;
+        this.next = null;
+    }
+}
+
+class Stack{
+    constructor(){
+        this.topOfStack = null;
+        this.length = 0;
+    }
+
+    push(item){
+        const node = new Node(item);
+        if(this.topOfStack!=null){
+            node.next = this.topOfStack;
+        }
+        this.topOfStack = node;
+        this.length+=1;
+    }
+
+    pop(){
+        if(this.length==0)return -1;
+        const popItem = this.topOfStack;
+        this.topOfStack = popItem.next;
+        this.length-=1;
+
+        return popItem.item
+    }
+
+    size(){
+        return this.length;
+    }
+
+    empty(){
+        if(this.length==0) return 1;
+        else return 0;
+    }
+
+    top(){
+        if(this.length==0)return -1;
+        return this.topOfStack.item;
+    }
+
+}
+
+
+let answer = [];
+let stack = new Stack();
+const command = arr.map(v=>v.split(' '));
+command.forEach(v=>{
+    switch(v[0]){
+        case 'push':
+            stack.push(v[1])
+            break;
+        case 'pop':
+            answer.push(stack.pop());
+            break;
+        case 'size':
+            answer.push(stack.size())
+            break;
+        case 'empty':
+            answer.push(stack.empty())
+            break;
+        case 'top':
+            answer.push(stack.top())
+            break;
+    }
+})
+
+console.log(answer.join('\n'))
