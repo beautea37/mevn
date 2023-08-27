@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 
 app.get('/book/:bookName', (req, res, next) => {
     const {bookName} = req.params
-    res.send(`니가 지금 읽어야 할 책 : 위기주도학습법`)
+    res.send(`니가 지금 읽어야 할 책 : ${bookName}`)
 })
 app.listen(PORT, ()=> {
     console.log(`서버 포트 번호 : ${PORT}`)
