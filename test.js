@@ -375,55 +375,7 @@ console.log(easyPutValueVB + " and " + easyPutValueVC);
 
 
 
-//심심풀이용 자바스크립트 문풀
-const filePath = process.platform === 'linux' ? '/dev/stdin' : 'ans.txt';
-const input = require('fs').readFileSync(filePath).toString().trim().split("\n");
-const ans = [];
-for(let text of input){
-    const stack = [];
-    let isCompare = true;
-    if(text == ".") break;
-    for(let i = 0; i < text.length; i++){
-        if(text[i] == "[" || text[i] == "("){
-            stack.push(text[i]);
-        }
-        else if(text[i] == "]"){
-            if(stack[stack.length - 1] == "["){
-                stack.pop();
-            }
-            else{
-                isCompare = false;
-                break;
-            }
-        }
-        else if(text[i] == ")"){
-            if(stack[stack.length - 1] == "("){
-                stack.pop();
-            }
-            else{
-                isCompare = false;
-                break;
-            }
-        }
-        else if(text[i] == ".") break;
-    }
-    if(stack.length > 0 || !isCompare) ans.push("no");
-    else ans.push("yes");
-}
-
-console.log(ans.join("\n"));
 ////////////////////
-
-const fs = require('fs');
-const [n, ...arr] = fs.readFileSync("./dev/stdin").toString().trim().split("\n");
-
-
-class Node{
-    constructor(item){
-        this.item = item;
-        this.next = null;
-    }
-}
 
 class Stack{
     constructor(){
@@ -466,27 +418,78 @@ class Stack{
 }
 
 
-let answer = [];
-let stack = new Stack();
-const command = arr.map(v=>v.split(' '));
-command.forEach(v=>{
-    switch(v[0]){
-        case 'push':
-            stack.push(v[1])
-            break;
-        case 'pop':
-            answer.push(stack.pop());
-            break;
-        case 'size':
-            answer.push(stack.size())
-            break;
-        case 'empty':
-            answer.push(stack.empty())
-            break;
-        case 'top':
-            answer.push(stack.top())
-            break;
-    }
-})
+//2.8 이터러블, 이터레이터, 제네레이터 - ES6
+/*
+* 이터러블 : 요소들을 순회하며 쉽게 탐색할 수 있는 자료구조
+* */
 
-console.log(answer.join('\n'))
+console.log("iteratorA ver1. True값을 반환한 후 배열 출력한다.")
+const iteratorA = ["사과", "딸기", "포도", "배"]
+console.log(Symbol.iterator in iteratorA);
+for(const iteratorB of iteratorA) console.log(iteratorB)
+
+console.log("iteratorA ver2. 배열만 출력한다.")
+for(let i = 0; i < iteratorA.length; i++) console.log(iteratorA[i])
+
+
+console.log("--------------------")
+let mp = new Map()
+mp.set("사과", "딸기");
+mp.set("포도", "배");
+console.log(mp.get("사과"));
+for(const a of mp) console.log(a)
+console.log(Symbol.iterator in mp)
+
+// 2.8.2 이터레이터
+/*
+이터러블한 것들은 이터레이터를 반환 가능한데, 이를 순회할 떄 쓰는 포인터로 이터러블 값 뽑아낼 때
+console.log(사용된다);it의 next()메서드를 통해 순회해 객체 반환*/
+
+console.log("2.8.2 iterator")
+const iteA = ["사과", "딸기", "포도", "배"]
+const it = iteA[Symbol.iterator]()
+console.log(it.next())
+console.log(it.next());
+console.log(it.next());
+console.log(it.next());
+console.log(it.next());     // value : undefined
+
+// 2.8.3 제너레이터
+console.log("2.8.3 generator")
+const log = console.log
+function * gen() {
+    yield 10
+    if (false) yield 20     //yield에는 조건문을 써서 값 추출 유무 결정 가능
+    yield 30
+    return 90               //제네레이터 함수가 return하면 다른 함수처럼 종료됨. but yield하면 value는 undefined, done은 true값 출력
+    yield 30
+}
+let iter = gen()
+console.log(iter)
+log(iter.next())
+log(iter.next())
+log(iter.next())
+log(iter.next())
+
+const logiter = console.log
+function * gen() {
+    yield 10
+    if (false) yield 20
+    yield 30
+    return 90
+    yield 30
+}
+
+console.log([...gen()])         //출력 시  [10, 30]
+
+const llog = console.log
+const add = a => a + 10
+const aaa = [1, 2, 3]
+const ret = aaa.map(add)
+log(ret)        // [ 11, 12, 13 ]
+
+
+
+
+
+
